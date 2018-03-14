@@ -22,18 +22,19 @@ Copy this file to you working diretory, same one as the "board.json" file.
 
 ```json
 {
-  "name": "AT25SF081",
+  "name": "LSM6DSL",
   "id": 2,
   "type": "Peripheral",
-  "file": "AT25SF081.so",
+  "file": "LSM6DSL.so",
   "config": {
     "pins": {
-      "wp": 1,
-      "cs": 2,
-      "sck": 3,
-      "si": 4,
-      "so": 5,
-      "hold": 6
+      "int2": 14,
+      "int1": 16,
+      "cs": 15,
+      "sck": 0,
+      "si": 21,
+      "so": 1,
+      "sa0": 10
     }
   }
 }
