@@ -35,6 +35,9 @@ Copy this file to you working diretory, same one as the "board.json" file.
       "si": 21,
       "so": 1,
       "sa0": 10
+    },
+    "generators": {
+      "accelerometer": 1
     }
   }
 }
