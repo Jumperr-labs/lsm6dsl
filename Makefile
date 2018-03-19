@@ -1,15 +1,20 @@
-$(shell mkdir -p modeling-framework/LSM6DSL/_build)
+CC=g++
+RM=rm
 
-PERIPHERAL_CFLAGS =  $(CFLAGS)
+peripheral_name = LSM6DSL
 
-ifeq ($(OPTIMIZE), 0)
-PERIPHERAL_CFLAGS += -g -ggdb
-endif
+$(shell mkdir -p _build)
 
-modeling-framework/LSM6DSL/_build/LSM6DSL.o: modeling-framework/LSM6DSL/LSM6DSL.cpp
-	$(CC) -fPIC -c -o $@ $^ $(PERIPHERAL_CFLAGS) -I./modeling-framework/LSM6DSL -I./modeling-framework/include
+CFLAGS= -g -ggdb -std=c++11 -Werror -Wall -Wfatal-errors -Wno-shift-count-overflow -Weffc++ -Wno-non-virtual-dtor -Wno-strict-aliasing -Wno-unused-private-field -O3 -pthread
 
-modeling-framework/LSM6DSL/_build/LSM6DSL.so: modeling-framework/LSM6DSL/_build/LSM6DSL.o obj/src/core/ModelingFramework.o
+all: _build/$(peripheral_name).so
+
+_build/$(peripheral_name).o: $(peripheral_name).cpp
+	$(CC) -fPIC -c -o $@ $^ $(CFLAGS) -I./include -I./modeling-framework/include
+
+_build/$(peripheral_name).so: _build/$(peripheral_name).o modeling-framework/obj/ModelingFramework.o
 	$(CC) -shared -o $@ $^
 
-LSM6DSL: modeling-framework/LSM6DSL/_build/LSM6DSL.so
+.PHONY: clean
+clean:
+	$(RM) -rf _build
