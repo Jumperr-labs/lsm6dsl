@@ -1,18 +1,15 @@
-CC=g++
-RM=rm
+$(shell mkdir -p modeling-framework/LSM6DSL/_build)
 
-$(shell mkdir -p _build)
+PERIPHERAL_CFLAGS =  $(CFLAGS)
 
-CFLAGS= -std=c++11 -Werror -Wall -Wfatal-errors -Wno-shift-count-overflow -Weffc++ -Wno-non-virtual-dtor -Wno-strict-aliasing -Wno-unused-private-field -O3 -pthread -lutil
+ifeq ($(OPTIMIZE), 0)
+PERIPHERAL_CFLAGS += -g -ggdb
+endif
 
-all: _build/LSM6DSL.so
+modeling-framework/LSM6DSL/_build/LSM6DSL.o: modeling-framework/LSM6DSL/LSM6DSL.cpp
+	$(CC) -fPIC -c -o $@ $^ $(PERIPHERAL_CFLAGS) -I./modeling-framework/LSM6DSL -I./modeling-framework/include
 
-_build/LSM6DSL.o: LSM6DSL.cpp
-	$(CC) -fPIC -c -o $@ $^ $(CFLAGS) -I./include -I./modeling-framework/include
-
-_build/LSM6DSL.so: _build/LSM6DSL.o modeling-framework/obj/ModelingFramework.o
+modeling-framework/LSM6DSL/_build/LSM6DSL.so: modeling-framework/LSM6DSL/_build/LSM6DSL.o obj/src/core/ModelingFramework.o
 	$(CC) -shared -o $@ $^
 
-.PHONY: clean
-clean:
-	$(RM) -rf _build
+LSM6DSL: modeling-framework/LSM6DSL/_build/LSM6DSL.so

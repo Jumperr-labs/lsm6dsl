@@ -1,0 +1,11 @@
+{
+    "DataGenerators": [
+        {
+            "id": 1,
+            "type": "File",
+            "config": {
+                "path": "./modeling-framework/LSM6DSL/accelerometer_data"
+            }
+        }
+    ]
+}

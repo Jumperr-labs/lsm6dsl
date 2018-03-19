@@ -1,0 +1,31 @@
+{
+	"description": "Nrf52-DK",
+	"components": [
+		{
+			"name": "nrf52832",
+			"id": 0,
+			"type": "MCU",
+			"class": "MCU"
+		},
+		{
+			"name": "LSM6DSL",
+			"id": 2,
+			"type": "Peripheral",
+			"file": "LSM6DSL.so",
+			"config": {
+				"pins": {
+					"int2": 14,
+					"int1": 16,
+					"cs": 15,
+					"sck": 0,
+					"si": 21,
+					"so": 1,
+					"sa0": 10
+				},
+				"generators": {
+					"accelerometer": 1
+				}
+			}
+		}
+	]
+}

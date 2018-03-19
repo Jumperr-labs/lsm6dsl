@@ -1,7 +1,7 @@
 #pragma once
 #include "ModelingFramework.h"
+#include <map>
 #include <queue>
-#include <tuple>
 
 #define MEMORY_SIZE (0x75)
 #define MAX_FIFO_SIZE (4096)
@@ -11,6 +11,8 @@ class LSM6DSL : public ExternalPeripheral {
     LSM6DSL();
     void Main() override;
     void Stop() override;
+    LSM6DSL(const LSM6DSL&) = delete;
+    LSM6DSL& operator=(const LSM6DSL&) = delete;
 
   private:
 
@@ -26,20 +28,6 @@ class LSM6DSL : public ExternalPeripheral {
     } fifo_mode_t;
 
     typedef enum {
-        DISABLE,
-        ODR_12_5_HZ,
-        ODR_26_HZ,
-        ODR_52_HZ,
-        ODR_104_HZ,
-        ODR_208_HZ,
-        ODR_416_HZ,
-        ODR_833_HZ,
-        ODR_1_66_KHZ,
-        ODR_3_33_KHZ,
-        ODR_6_66_KHZ,
-    } fifo_oder_t;
-
-    typedef enum {
         READ_ONLY,
         WRITE_ONLY,
         READ_WRITE,
@@ -47,15 +35,19 @@ class LSM6DSL : public ExternalPeripheral {
     } read_write_t;
 
     void WriteToFifoCntrl5(uint8_t value);
+    void WriteToDrdyPulseCfg(uint8_t value);
+    void TimerCallback();
     void LoadDataIntoOutputRegs();
-    void ClearFifo(std::queue<uint16_t> &fifo);
+    void ClearFifo();
     bool IsIfIncSet();
     bool IsBduBitSet();
     void WriteDataToMaster(uint32_t start_reg);
     void ReadDataFromMaster(uint32_t start_reg_address);
     void MemReset();
+    void UpdateOdr();
 
     fifo_mode_t mode_;
+    float fifo_odr_;
     std::queue<uint16_t> fifo_; // data set is reserved for gyroscope data
     iSpiSlaveV1* spi_slave_ {};
     uint8_t memory_[MEMORY_SIZE] {};
@@ -65,6 +57,9 @@ class LSM6DSL : public ExternalPeripheral {
     int int1_pin_number_ {};
     int int2_pin_number_ {};
     bool should_stop_;
+    int timer_id_;
+    std::map<uint8_t, float> odr_;
+    bool output_regs_update_;
 };
 
 extern "C" ExternalPeripheral *PeripheralFactory() {
