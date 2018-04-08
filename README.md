@@ -1,4 +1,4 @@
-# Jumper Virtual Lab Peripheral Model - AT25SF081
+# Jumper Virtual Lab Peripheral Model - LSM6DSL
 This repo contains a model for the [lsm6dsl](http://www.st.com/en/mems-and-sensors/lsm6dsl.html) SPI accelerometer for [Jumper Virtual Lab](https://vlab.jumper.io).
 
 For more information, visit [the docs](https://docs.jumper.io).
